@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
     user: "root",
 
     // Your password
-    password: "0177",
+    password: "TqV9z!0snR",
     database: "cms_db"
 });
 
@@ -29,9 +29,9 @@ const questions = [
     message: 'What would you like to do?',
     choices: 
     [
-      'View Department',
-      'View Roles',
-      'View Employees',
+      'View All Departments',
+      'View All Roles',
+      'View All Employees',
       'Add Department',
       'Add Role',
       'Add Employee',
@@ -47,7 +47,7 @@ function popData(){
     'SELECT * FROM employee',
     function(req, res){
       for (var i = 0; i < res.length; i++) {
-        employeeArray.push((res[i].firstName + ' ' + res[i].lastName))
+        employeeArray.push((res[i].id + ' ' + res[i].firstName + ' ' + res[i].lastName))
       }
       // console.log(employeeArray)
     }
@@ -63,15 +63,15 @@ function start(){
   .then(function(answers){
   
   switch(answers.task){
-    case 'View Department':
+    case 'View All Departments':
       viewDepartment();
     break
 
-    case 'View Roles':
+    case 'View All Roles':
       viewRole();
     break
 
-    case 'View Employees':
+    case 'View All Employees':
       viewEmployee();
     break
 
@@ -88,11 +88,11 @@ function start(){
     break
 
     case 'Update Employee':
-      updateEmployee();
+      pickEmployeeToUpdate();
     break
 
     case 'EXIT':
-      return 
+    process.exit(-1);
   }
 })
 }
@@ -239,6 +239,7 @@ function viewDepartment(){
     "SELECT * FROM department",
     function(err, response) {
       if (err) throw err;
+      console.log('\n')
       console.table(response)     
     },
     start()
@@ -251,6 +252,7 @@ function viewRole(){
     'SELECT * FROM role',
     function(err, response) {
       if (err) throw err;
+      console.log('\n')
       console.table(response)
   },
     start() 
@@ -263,6 +265,7 @@ function viewEmployee(){
     'SELECT * FROM employee',
     function(err, response){
       if (err) throw err;
+      console.log('\n')
       console.table(response)
       // employeeArray.push(res.firstName)
     },
@@ -292,72 +295,99 @@ function returnPrompt(){
       if (exitUpdateMenu === 'YES, I am finished UPDATING employee information'){
         start()
       } else {
-        updateEmployee()
+        pickEmployeeToUpdate()
       }    
     }
   )
 }
 
 
-//                                                                   UPDATE EMPLOYEE INFORMATION
+//                                                                  UPDATE EMPLOYEE INFORMATION
+function pickEmployeeToUpdate(){
+  // console.log('Updating employee info \n')
+  inquirer
+  .prompt([    
+    {
+      type: 'list',
+      message: 'Select an employee to update',
+      name: 'employeeToUpdate',
+      choices: employeeArray,
+    }
+  ]).then(function({employee}){
+    updateEmployee(employee)
+  }
+
+  )
+}
 
 function updateEmployee(){
     // console.log('Updating employee info \n')
   inquirer
-  .prompt([
+  .prompt([   
     {
-      type: 'checkbox',
+      type: 'list',
       message: 'Select what you want to UPDATE',
       name: 'updateChoice',
-      choices: employeeArray
-    },
+      choices: [
+        'First Name',
+        'Last Name',
+        'Role ID',
+        'Manager ID'
+      ]      
+    },    
     {
       type: 'input',
       message: 'Enter the updated FIRST name',
       name: 'updatedFirstName',
-      when: function(answers){
-        answers.updateChoice === 'Employee FIRST name'
+      when: function(answer){
+        return answer.updateChoice === 'First Name'
       }
     },
     {
       type: 'input',
       message: 'Enter the updated LAST name',
       name: 'updatedLastName',
-      when: function(answers){
-        answers.updateChoice === 'Employee LAST name';
+      when: function(answer){
+        return answer.updateChoice === 'Last Name';
       }
     },
     {
       type: 'input',
       message: 'Enter the update ROLE ID',
       name: 'updatedRoleId',
-      when: function(answers){
-        answers.updateChoice === 'Employee ROLE ID';
+      when: function(answer){
+        return answer.updateChoice === 'Role ID';
       }
     },
     {
       type: 'input',
       message: 'Enter the updated MANAGER ID',
       name: 'updatedManagerId',
-      when: function(answers){
-        answers.updateChoice === 'Employee Manager ID';
+      when: function(answer){
+        return answer.updateChoice === 'Manager ID';
       }
     },
-  ]).then(function(answers){
-    console.log('hello')
+  ]).then(function(answer){
+    console.log(answer)
 
-    switch(answers.updateChoice){
+    switch(answer.updateChoice){
 
-      case 'Employee FIRST name':
+      case 'First Name':
         // console.log('NOW IN FIRST NAME SWITCH CASE')
            connection.query(
           'UPDATE employee SET ? WHERE ?',
-          {
-            firstName: updatedFirstName,
-            
-          },
-          function(err, res) {if (err) throw err;
-            console.log(res.affectedRows + 'Employee FIRST name updated \n')
+          [
+            {
+              firstName: answer.updatedFirstName,  
+            },
+            {
+              id: employeeArray.indexOf(firstName)
+            }
+  
+          ],
+          function(err, res) {
+            if (err) throw err;
+            // console.log(res.affectedRows + 'Employee FIRST name updated \n')
           },
           returnPrompt()        
         )
@@ -408,5 +438,3 @@ function updateEmployee(){
     }
   })  
 }
-
-
