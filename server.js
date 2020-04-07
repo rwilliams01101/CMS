@@ -47,7 +47,7 @@ function popData(){
     'SELECT * FROM employee',
     function(req, res){
       for (var i = 0; i < res.length; i++) {
-        employeeArray.push((res[i].id + ' ' + res[i].firstName + ' ' + res[i].lastName))
+        employeeArray.push((res[i].id + ' ' + res[i].first_name + ' ' + res[i].last_name))
       }
       // console.log(employeeArray)
     }
@@ -191,38 +191,38 @@ function addEmployee(){
       {
         type: 'input',
         message: 'Enter the employee FIRST NAME',
-        name: 'firstName'
+        name: 'first_name'
       },
       {
         type: 'input',
         message: 'Please enter the employee LAST NAME',
-        name: 'lastName'
+        name: 'last_name'
       },
       {
         type: 'input',
         message: 'SELECT the employee ROLE ID',
-        name: 'roleId'
+        name: 'role_id'
       },
       {
         type: 'input',
         message: "Enter the employee's MANAGER ID",
-        name: 'managerId'
+        name: 'manager_id'
       },
     ]
   )
-  .then(function({ firstName, lastName, roleId, managerId }){
+  .then(function({ first_name, last_name, role_id, manager_id }){
     connection.query(
       'INSERT INTO employee SET ?',
       {
-        firstName: firstName,
-        lastName: lastName,
-        roleId: roleId,
-        managerId: managerId,
+        first_name: first_name,
+        last_name: last_name,
+        role_id: role_id,
+        manager_id: manager_id,
       },
       function(err,res) {
         if (err) throw err;
         console.log(res.affectedRows + ' Employee created \n')
-        employeeArray.push(JSON.stringify(firstName + ' ' + lastName))
+        employeeArray.push(JSON.stringify(first_name + ' ' + last_name))
         console.log(employeeArray)
 
         start()
@@ -267,7 +267,7 @@ function viewEmployee(){
       if (err) throw err;
       console.log('\n')
       console.table(response)
-      // employeeArray.push(res.firstName)
+      // employeeArray.push(res.first_name)
     },
     start() 
 
@@ -338,7 +338,7 @@ function updateEmployee(){
     {
       type: 'input',
       message: 'Enter the updated FIRST name',
-      name: 'updatedFirstName',
+      name: 'updatedfirst_name',
       when: function(answer){
         return answer.updateChoice === 'First Name'
       }
@@ -346,7 +346,7 @@ function updateEmployee(){
     {
       type: 'input',
       message: 'Enter the updated LAST name',
-      name: 'updatedLastName',
+      name: 'updatedlast_name',
       when: function(answer){
         return answer.updateChoice === 'Last Name';
       }
@@ -354,7 +354,7 @@ function updateEmployee(){
     {
       type: 'input',
       message: 'Enter the update ROLE ID',
-      name: 'updatedRoleId',
+      name: 'updatedrole_id',
       when: function(answer){
         return answer.updateChoice === 'Role ID';
       }
@@ -362,7 +362,7 @@ function updateEmployee(){
     {
       type: 'input',
       message: 'Enter the updated MANAGER ID',
-      name: 'updatedManagerId',
+      name: 'updatedmanager_id',
       when: function(answer){
         return answer.updateChoice === 'Manager ID';
       }
@@ -378,10 +378,10 @@ function updateEmployee(){
           'UPDATE employee SET ? WHERE ?',
           [
             {
-              firstName: answer.updatedFirstName,  
+              first_name: answer.updatedfirst_name,  
             },
             {
-              id: employeeArray.indexOf(firstName)
+              id: employeeArray.indexOf(first_name)
             }
   
           ],
@@ -393,12 +393,16 @@ function updateEmployee(){
         )
         break
 
-      case 'Employee LAST name':
+      case 'Last Name':
+        console.log("You're a hit!")
         connection.query(
           'UPDATE employee SET ? WHERE ?',
-          {
-            lastName: updatedLastName,
+          [{
+            updatedlast_name,
           },
+          {
+            last_name:last_name,
+          }],
           function(err) {if (err) throw err;
             console.log('Updated Employee LAST name \n')
             returnPrompt()          
@@ -406,11 +410,11 @@ function updateEmployee(){
         )
         break
       
-      case 'Employee ROLE ID':
+      case 'Role ID':
       connection.query(
         'UPDATE employee SET ? WHERE ?',
         {
-          roleId: updatedRoleId,
+          role_id: updatedrole_id,
         },
         function(err) {if (err) throw err;
           console.log('Updated Employee ROLE ID \n')
@@ -419,11 +423,11 @@ function updateEmployee(){
       )
       break
     
-      case 'Employee MANAGER ID':
+      case 'Manager ID':
         connection.query(
           'UPDATE employee SET ? WHERE ?',
           {
-            managerId: updatedManagerId,
+            manager_id: updatedmanager_id,
           },
           function(err) {if (err) throw err;
             console.log('Updated Employee MANAGER ID \n')
