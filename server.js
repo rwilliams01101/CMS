@@ -255,8 +255,8 @@ function viewRole(){
       console.log('\n')
       console.table(response)
       mainMenu() 
-  },
-  )
+    },
+  );
 }
 
 function viewEmployee(){
@@ -270,9 +270,7 @@ function viewEmployee(){
       // employeeArray.push(res.first_name)
       mainMenu() 
     },
-
-  )
-    
+  );
 }
 
 //                                                     RETURN TO MAIN MENU OR CONTINUE UPDATING EMPLOYEE INFO
