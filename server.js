@@ -383,80 +383,34 @@ function updateEmployee(){
         return answer.updateChoice === 'Manager ID';
       }
     }
-  ])
-}
-
-
-
     // I need to pass through the newXX variables along with the original variables
-  // ]).then(function(answer){
+  ]).then(function(answer){
 
-  //   switch(answer.updateChoice){
+    switch(answer.updateChoice){
 
-  //     case 'First Name':
-  //          connection.query(
-  //         'UPDATE employee SET ? WHERE ?',
-  //         [
-  //           {
-  //             newFirstName 
-  //           },
-  //           {
-  //             first_name
-  //           }
-  //         ],
-  //         function(err) {if (err) throw err;
-  //           console.log(res.affectedRows + 'Employee FIRST name updated \n')
-  //         },
-  //         returnPrompt()        
-  //       )
-  //       break
+      case 'First Name':
+        console.log('First Name Updated!')
+        mainMenu()
+        break
 
-  //     case 'Last Name':
-  //       console.log("You're a hit!")
-  //       connection.query(
-  //         'UPDATE employee SET ? WHERE ?',
-  //         [{
-  //           newLastName,
-  //         },
-  //         {
-  //           last_name:last_name,
-  //         }],
-  //         function(err) {if (err) throw err;
-  //           console.log('Updated Employee LAST name \n')
-  //           returnPrompt()          
-  //         }
-  //       )
-  //       break
+      case 'Last Name':
+        console.log('Last Name Updated!')
+        mainMenu()
+        break
       
-  //     case 'Role ID':
-  //     connection.query(
-  //       'UPDATE employee SET ? WHERE ?',
-  //       {
-  //         role_id: newRoleID,
-  //       },
-  //       function(err) {if (err) throw err;
-  //         console.log('Updated Employee ROLE ID \n')
-  //         returnPrompt()        
-  //       }
-  //     )
-  //     break
+      case 'Role ID':
+        console.log('Role ID Updated!')
+        mainMenu()
+      break
     
-  //     case 'Manager ID':
-  //       connection.query(
-  //         'UPDATE employee SET ? WHERE ?',
-  //         {
-  //           manager_id: newManagerID,
-  //         },
-  //         function(err) {if (err) throw err;
-  //           console.log('Updated Employee MANAGER ID \n')
-  //           returnPrompt()          
-  //         }
-  //       )
-  //       break
+      case 'Manager ID':
+        console.log('Manager ID Updated!')
+        mainMenu()
+        break
 
-  //       case 'EXIT EMPLOYEE UPDATE MENU':
-  //         returnPrompt()                
-  //       break      
-  //   }
-  // })  
-// }
+        case 'EXIT EMPLOYEE UPDATE MENU':
+          returnPrompt()                
+        break      
+    }
+  })  
+}
