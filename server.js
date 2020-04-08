@@ -214,16 +214,16 @@ function addEmployee(){
     connection.query(
       'INSERT INTO employee SET ?',
       {
-        first_name: first_name,
-        last_name: last_name,
-        role_id: role_id,
-        manager_id: manager_id,
+        first_name,
+        last_name,
+        role_id,
+        manager_id,
       },
       function(err,res) {
         if (err) throw err;
         console.log(res.affectedRows + ' Employee created \n')
         employeeArray.push(JSON.stringify(first_name + ' ' + last_name))
-        console.log(employeeArray)
+        console.table(employeeArray)
 
         start()
       },
@@ -241,8 +241,8 @@ function viewDepartment(){
       if (err) throw err;
       console.log('\n')
       console.table(response)     
+      mainMenu()
     },
-    start()
   );
 }
 
@@ -254,8 +254,8 @@ function viewRole(){
       if (err) throw err;
       console.log('\n')
       console.table(response)
+      mainMenu() 
   },
-    start() 
   )
 }
 
@@ -268,14 +268,29 @@ function viewEmployee(){
       console.log('\n')
       console.table(response)
       // employeeArray.push(res.first_name)
+      mainMenu() 
     },
-    start() 
 
   )
     
 }
 
 //                                                     RETURN TO MAIN MENU OR CONTINUE UPDATING EMPLOYEE INFO
+
+function mainMenu(){
+  inquirer
+  .prompt([
+    {
+      type: 'confirm',
+      message: 'Return to MAIN MENU',
+      name: 'returnConfirm'
+    }
+  ]).then(function({returnConfirm}){
+    if (returnConfirm){
+      start()
+    }
+  })
+}
 
 function returnPrompt(){
     inquirer
@@ -321,7 +336,6 @@ function pickEmployeeToUpdate(){
 }
 
 function updateEmployee(){
-    // console.log('Updating employee info \n')
   inquirer
   .prompt([   
     {
@@ -338,7 +352,7 @@ function updateEmployee(){
     {
       type: 'input',
       message: 'Enter the updated FIRST name',
-      name: 'updatedfirst_name',
+      name: 'newFirstName',
       when: function(answer){
         return answer.updateChoice === 'First Name'
       }
@@ -346,7 +360,7 @@ function updateEmployee(){
     {
       type: 'input',
       message: 'Enter the updated LAST name',
-      name: 'updatedlast_name',
+      name: 'newLastName',
       when: function(answer){
         return answer.updateChoice === 'Last Name';
       }
@@ -354,7 +368,7 @@ function updateEmployee(){
     {
       type: 'input',
       message: 'Enter the update ROLE ID',
-      name: 'updatedrole_id',
+      name: 'newRoleID',
       when: function(answer){
         return answer.updateChoice === 'Role ID';
       }
@@ -362,32 +376,31 @@ function updateEmployee(){
     {
       type: 'input',
       message: 'Enter the updated MANAGER ID',
-      name: 'updatedmanager_id',
+      name: 'newManagerID',
       when: function(answer){
         return answer.updateChoice === 'Manager ID';
       }
     },
-  ]).then(function(answer){
-    console.log(answer)
+
+    // I need to pass through the newXX variables along with the original variables
+  ]).then(function(answer, newFirstName, newLastName, newRoleID, newManagerID, first_name, last_name, role_id, manager_id){
 
     switch(answer.updateChoice){
 
       case 'First Name':
-        // console.log('NOW IN FIRST NAME SWITCH CASE')
+        console.log("result", answer.updateChoice);
            connection.query(
           'UPDATE employee SET ? WHERE ?',
           [
             {
-              first_name: answer.updatedfirst_name,  
+              newFirstName 
             },
             {
-              id: employeeArray.indexOf(first_name)
+              first_name
             }
-  
           ],
-          function(err, res) {
-            if (err) throw err;
-            // console.log(res.affectedRows + 'Employee FIRST name updated \n')
+          function(err) {if (err) throw err;
+            console.log(res.affectedRows + 'Employee FIRST name updated \n')
           },
           returnPrompt()        
         )
@@ -398,7 +411,7 @@ function updateEmployee(){
         connection.query(
           'UPDATE employee SET ? WHERE ?',
           [{
-            updatedlast_name,
+            newLastName,
           },
           {
             last_name:last_name,
@@ -414,7 +427,7 @@ function updateEmployee(){
       connection.query(
         'UPDATE employee SET ? WHERE ?',
         {
-          role_id: updatedrole_id,
+          role_id: newRoleID,
         },
         function(err) {if (err) throw err;
           console.log('Updated Employee ROLE ID \n')
@@ -427,7 +440,7 @@ function updateEmployee(){
         connection.query(
           'UPDATE employee SET ? WHERE ?',
           {
-            manager_id: updatedmanager_id,
+            manager_id: newManagerID,
           },
           function(err) {if (err) throw err;
             console.log('Updated Employee MANAGER ID \n')
