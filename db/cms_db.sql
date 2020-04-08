@@ -52,8 +52,8 @@ VALUES (1, "Band"), (2, "Executive"), (3, "Roadie"), (4, "Groupie");
 
 -- Starting information for the role table --
 INSERT INTO role (id, title, salary, department_id)
-VALUES (1, "Front Man", 75000, 1), (2, "Rhythm Guitar", 50000, 4), (3, "Lead Vocals", 60000, 3), (4, "Yoko", 250000, 2);
+VALUES (1, "Front Man", 75000, 1), (2, "Rhythm Guitar", 50000, 1), (3, "Lead Vocals", 60000, 3), (4, "Yoko", 250000, 4), (5, "Manager", 1000000, 2);
 
 -- Starting information for the employee table --
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Jimi", "Hendrix", 1, 100), ("Rob", "Zombie", 2, 200), ("David", "Bowie", 3, 300), ("Julian", "Casablancas", 4, 400);
+VALUES ("Jimi", "Hendrix", 1, 100), ("Rob", "Zombie", 2, 200), ("David", "Bowie", 3, 300), ("Julian", "Casablancas", 4, 400), ("Quincy", "Jones", 2, NULL);

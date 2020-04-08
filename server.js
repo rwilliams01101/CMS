@@ -383,7 +383,6 @@ function updateEmployee(){
         return answer.updateChoice === 'Manager ID';
       }
     }
-    // I need to pass through the newXX variables along with the original variables
   ]).then(function(answer){
 
     switch(answer.updateChoice){
@@ -399,8 +398,7 @@ function updateEmployee(){
         break
       
       case 'Role ID':
-        console.log('Role ID Updated!')
-        mainMenu()
+        updateEmployeeRoleQuestion();
       break
     
       case 'Manager ID':
@@ -413,4 +411,43 @@ function updateEmployee(){
         break      
     }
   })  
+}
+
+function updateEmployeeRoleQuestion() {
+  inquirer
+  .prompt([
+{
+  type: "input",
+  message: "Select which Employee you'd like to make updates to (enter their ID number)",
+  name: "id"
+},
+{
+  type: "input",
+  message: "Enter the role you'd like the employee to have now (enter the role ID number)",
+  name: "role_id"
+}
+  ])
+  .then(function (answers) {
+          updateEmployeeRole(connection, answers.role_id, answers.id);
+  })
+}
+
+function updateEmployeeRole(connection, role_id, id) {
+  console.log("Updating employee role...\n");
+  var query = connection.query(
+    "UPDATE employee SET ? WHERE ?",
+    [
+      {
+        role_id: role_id
+      },
+      {
+        id: id
+      }
+    ],
+    function(err, res) {
+      if (err) throw err;
+      console.log(res.affectedRows + " Role Updated!\n");
+      mainMenu();
+    }
+  )
 }
