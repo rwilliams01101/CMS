@@ -288,6 +288,8 @@ function mainMenu(){
   ]).then(function({returnConfirm}){
     if (returnConfirm){
       start()
+    } else {
+      process.exit(-1);
     }
   })
 }
@@ -380,78 +382,81 @@ function updateEmployee(){
       when: function(answer){
         return answer.updateChoice === 'Manager ID';
       }
-    },
+    }
+  ])
+}
+
+
 
     // I need to pass through the newXX variables along with the original variables
-  ]).then(function(answer, newFirstName, newLastName, newRoleID, newManagerID, first_name, last_name, role_id, manager_id){
+  // ]).then(function(answer){
 
-    switch(answer.updateChoice){
+  //   switch(answer.updateChoice){
 
-      case 'First Name':
-        console.log("result", answer.updateChoice);
-           connection.query(
-          'UPDATE employee SET ? WHERE ?',
-          [
-            {
-              newFirstName 
-            },
-            {
-              first_name
-            }
-          ],
-          function(err) {if (err) throw err;
-            console.log(res.affectedRows + 'Employee FIRST name updated \n')
-          },
-          returnPrompt()        
-        )
-        break
+  //     case 'First Name':
+  //          connection.query(
+  //         'UPDATE employee SET ? WHERE ?',
+  //         [
+  //           {
+  //             newFirstName 
+  //           },
+  //           {
+  //             first_name
+  //           }
+  //         ],
+  //         function(err) {if (err) throw err;
+  //           console.log(res.affectedRows + 'Employee FIRST name updated \n')
+  //         },
+  //         returnPrompt()        
+  //       )
+  //       break
 
-      case 'Last Name':
-        console.log("You're a hit!")
-        connection.query(
-          'UPDATE employee SET ? WHERE ?',
-          [{
-            newLastName,
-          },
-          {
-            last_name:last_name,
-          }],
-          function(err) {if (err) throw err;
-            console.log('Updated Employee LAST name \n')
-            returnPrompt()          
-          }
-        )
-        break
+  //     case 'Last Name':
+  //       console.log("You're a hit!")
+  //       connection.query(
+  //         'UPDATE employee SET ? WHERE ?',
+  //         [{
+  //           newLastName,
+  //         },
+  //         {
+  //           last_name:last_name,
+  //         }],
+  //         function(err) {if (err) throw err;
+  //           console.log('Updated Employee LAST name \n')
+  //           returnPrompt()          
+  //         }
+  //       )
+  //       break
       
-      case 'Role ID':
-      connection.query(
-        'UPDATE employee SET ? WHERE ?',
-        {
-          role_id: newRoleID,
-        },
-        function(err) {if (err) throw err;
-          console.log('Updated Employee ROLE ID \n')
-          returnPrompt()        
-        }
-      )
-      break
+  //     case 'Role ID':
+  //     connection.query(
+  //       'UPDATE employee SET ? WHERE ?',
+  //       {
+  //         role_id: newRoleID,
+  //       },
+  //       function(err) {if (err) throw err;
+  //         console.log('Updated Employee ROLE ID \n')
+  //         returnPrompt()        
+  //       }
+  //     )
+  //     break
     
-      case 'Manager ID':
-        connection.query(
-          'UPDATE employee SET ? WHERE ?',
-          {
-            manager_id: newManagerID,
-          },
-          function(err) {if (err) throw err;
-            console.log('Updated Employee MANAGER ID \n')
-            returnPrompt()          
-          }
-        )
-        break
+  //     case 'Manager ID':
+  //       connection.query(
+  //         'UPDATE employee SET ? WHERE ?',
+  //         {
+  //           manager_id: newManagerID,
+  //         },
+  //         function(err) {if (err) throw err;
+  //           console.log('Updated Employee MANAGER ID \n')
+  //           returnPrompt()          
+  //         }
+  //       )
+  //       break
 
-        case 'EXIT EMPLOYEE UPDATE MENU':
-          returnPrompt()                
-        break      
-    }
-  })  
-}
+  //       case 'EXIT EMPLOYEE UPDATE MENU':
+  //         returnPrompt()                
+  //       break      
+  //   }
+  // })  
+// }
